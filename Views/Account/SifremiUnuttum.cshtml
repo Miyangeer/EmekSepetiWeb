@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Şifremi Unuttum";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold text-center mb-3">Şifrenizi mi Unuttunuz? 📱</h3>
+                    <p class="text-muted text-center small mb-4">Hesabınıza kayıtlı telefon numaranızı yazın, size şifre sıfırlama kodu gönderelim.</p>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger small">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form asp-action="SifremiUnuttum" method="post" id="phoneForm">
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Telefon Numaranız</label>
+                            <input type="text"
+                                   id="telefonInput"
+                                   name="TelefonNo"
+                                   class="form-control"
+                                   placeholder="05XXXXXXXXX"
+                                   maxlength="11"
+                                   pattern="05[0-9]{9}"
+                                   title="Lütfen 05 ile başlayan 11 haneli telefon numaranızı girin."
+                                   required />
+                            <div id="phoneError" class="text-danger small mt-1" style="display:none;">Telefon numarası '05' ile başlamalı ve 11 haneli olmalıdır!</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 p-2 text-white" style="background: linear-gradient(to right, #764ba2, #667eea); border: none;">
+                            Doğrulama Kodu Gönder
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <a asp-action="GirisYap" class="small text-decoration-none">← Giriş Ekranına Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const telefonInput = document.getElementById('telefonInput');
+        const phoneForm = document.getElementById('phoneForm');
+        const phoneError = document.getElementById('phoneError');
+
+        telefonInput.addEventListener('input', () => {
+            telefonInput.value = telefonInput.value.replace(/[^0-9]/g, '');
+        });
+
+        phoneForm.addEventListener('submit', (e) => {
+            if (!/^05[0-9]{9}$/.test(telefonInput.value)) {
+                e.preventDefault();
+                phoneError.style.display = 'block';
+                telefonInput.classList.add('is-invalid');
+            } else {
+                phoneError.style.display = 'none';
+                telefonInput.classList.remove('is-invalid');
+            }
+        });
+    </script>
+}

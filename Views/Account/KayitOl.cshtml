@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header text-white text-center p-4" style="background: linear-gradient(to right, #764ba2, #667eea);">
+                    <h3 class="mb-0 fw-bold">✨ Yeni Hesap Oluştur</h3>
+                    <p class="mb-0 small text-white-50">El emeği ürünlerinizi satmaya hemen başlayın.</p>
+                </div>
+
+                <div class="card-body p-5 bg-light">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger small shadow-sm">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form asp-action="KayitOl" method="post" id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Adınız</label>
+                                <input type="text" name="Ad" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Soyadınız</label>
+                                <input type="text" name="Soyad" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">E-Posta Adresi</label>
+                            <input type="email" name="Email" class="form-control" placeholder="ornek@domain.com" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Telefon Numarası</label>
+                            <input type="text" id="regTelefon" name="Telefon" class="form-control" placeholder="05XXXXXXXXX" maxlength="11" pattern="05[0-9]{9}" required />
+                            <div id="regPhoneError" class="text-danger small mt-1" style="display:none;">Numara 05 ile başlamalı ve 11 hane olmalıdır!</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Şifre</label>
+                            <div class="input-group">
+                                <input type="password" id="regPassword" name="Sifre" class="form-control" placeholder="••••••••" required />
+                                <button class="btn btn-outline-secondary bg-white border-start-0" type="button" id="btnToggleRegPassword">
+                                    <span id="regEyeIcon" style="font-size: 1.2rem;">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 p-2 text-white rounded-2 shadow-sm" style="background: linear-gradient(to right, #764ba2, #667eea); border: none;">
+                            Hesabımı Oluştur ✨
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Şifre Emoji Geçiş Mantığı
+        const regPassword = document.getElementById('regPassword');
+        const btnToggleRegPassword = document.getElementById('btnToggleRegPassword');
+        const regEyeIcon = document.getElementById('regEyeIcon');
+
+        btnToggleRegPassword.addEventListener('click', () => {
+            if (regPassword.type === 'password') {
+                // Şifre açıldı -> Maymun gözünü kapattı
+                regPassword.type = 'text';
+                regEyeIcon.innerText = '🙈';
+            } else {
+                // Şifre kapandı -> Normal göz geldi
+                regPassword.type = 'password';
+                regEyeIcon.innerText = '👁️';
+            }
+        });
+
+        // Telefon Alanı Kısıtlamaları
+        const regTelefon = document.getElementById('regTelefon');
+        const registerForm = document.getElementById('registerForm');
+        const regPhoneError = document.getElementById('regPhoneError');
+
+        regTelefon.addEventListener('input', () => {
+            regTelefon.value = regTelefon.value.replace(/[^0-9]/g, '');
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            if (!/^05[0-9]{9}$/.test(regTelefon.value)) {
+                e.preventDefault();
+                regPhoneError.style.display = 'block';
+                regTelefon.classList.add('is-invalid');
+            } else {
+                regPhoneError.style.display = 'none';
+                regTelefon.classList.remove('is-invalid');
+            }
+        });
+    </script>
+}

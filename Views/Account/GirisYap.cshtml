@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header text-white text-center p-4" style="background: linear-gradient(to right, #764ba2, #667eea);">
+                    <h3 class="mb-0 fw-bold"><i class="bi bi-box-arrow-in-right"></i> Giriş Yap</h3>
+                    <p class="mb-0 small text-white-50">Emek Sepeti dünyasına hoş geldiniz.</p>
+                </div>
+
+                <div class="card-body p-5 bg-light">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger small shadow-sm">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form asp-action="GirisYap" method="post">
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">E-Posta Adresi</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-muted"><i class="bi bi-envelope"></i></span>
+                                <input type="email" name="Email" class="form-control" placeholder="name@example.com" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Şifre</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-muted"><i class="bi bi-lock"></i></span>
+                                <input type="password" id="loginPassword" name="Sifre" class="form-control" placeholder="••••••••" required />
+                                <button class="btn btn-outline-secondary bg-white text-muted border-start-0" type="button" id="btnToggleLoginPassword" style="z-index: 10;">
+                                    <span id="eyeIcon" style="font-size: 1.1rem;">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 d-flex justify-content-between align-items-center">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="RememberMe" name="BeniHatirla" value="true">
+                                <label class="form-check-label small text-muted select-none" for="RememberMe">Beni Hatırla</label>
+                            </div>
+                            <a asp-controller="Account" asp-action="SifremiUnuttum" class="small text-primary text-decoration-none fw-semibold">
+                                Şifremi Unuttum?
+                            </a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 p-2 mb-3 text-white rounded-2 shadow-sm" style="background: linear-gradient(to right, #764ba2, #667eea); border: none;">
+                            Sisteme Giriş Yap
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <p class="small text-muted mb-0">Henüz hesabınız yok mu? <a asp-action="KayitOl" class="text-primary text-decoration-none fw-semibold">Hemen Kayıt Ol</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const loginPassword = document.getElementById('loginPassword');
+        const btnToggleLoginPassword = document.getElementById('btnToggleLoginPassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        btnToggleLoginPassword.addEventListener('click', () => {
+            if (loginPassword.type === 'password') {
+                loginPassword.type = 'text';
+                eyeIcon.innerText = '🙈'; // Açınca maymun gözünü kapasın
+            } else {
+                loginPassword.type = 'password';
+                eyeIcon.innerText = '👁️'; // Kapatınca normal göz gelsin
+            }
+        });
+    </script>
+}
