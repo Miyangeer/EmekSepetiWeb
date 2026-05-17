@@ -41,23 +41,69 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<UygulamaDbContext>();
     context.Database.Migrate();
 
+    if (!context.Kategoriler.Any())
+    {
+        var kategoriler = new List<Kategori>
+    {
+        new Kategori { Ad = "Ev Yemekleri & Gýda" },
+        new Kategori { Ad = "Taký & Aksesuar" },
+        new Kategori { Ad = "Ahþap & Oyuncak" }
+    };
+        context.Kategoriler.AddRange(kategoriler);
+        context.SaveChanges(); // Önce kategorileri kaydet ki Id'leri oluþsun
+    }
+
+    if (!context.Urunler.Any())
+    {
+        // Artýk ürünleri eklerken KategoriId verebiliriz
+        var urunler = new List<Urun>
+    {
+        new Urun { Ad = "Kayseri Usulü Ev Mantýsý (1 Kg)", Aciklama = "...", Fiyat = 350, KategoriId = 1, ResimUrl="manti.jpg" },
+        new Urun { Ad = "Doðal Taþlý El Yapýmý Kolye", Aciklama = "...", Fiyat = 190, KategoriId = 2, ResimUrl="kolye.jpg" },
+        new Urun { Ad = "Ahþap Oyuncak Tren Seti", Aciklama = "...", Fiyat = 280, KategoriId = 3, ResimUrl="tren.jpg" }
+    };
+        context.Urunler.AddRange(urunler);
+        context.SaveChanges();
+    }
+
     // Hata veren alanlarý kaldýrýp en sade ve güvenli haliyle tohumlama yapýyoruz
     if (!context.Urunler.Any())
     {
         var urunler = new List<Urun>
         {
-            new Urun { Ad = "Kayseri Usulü Ev Mantýsý (1 Kg)", Aciklama = "%100 dana kýymasýyla, tamamen ev ortamýnda elde kesilerek hazýrlanmýþ dondurulmuþ anne mantýsý.", Fiyat = 350 },
-            new Urun { Ad = "Doðal Taþlý El Yapýmý Kolye", Aciklama = "Gerçek ametist ve lav taþlarý kullanýlarak pirinç tel sarma tekniðiyle tasarlanmýþ eþsiz þans kolyesi.", Fiyat = 190 },
-            new Urun { Ad = "Ahþap Oyuncak Tren Seti", Aciklama = "Çocuklar için tamamen doðal gürgen aðacýndan üretilmiþ, organik boyalý 5 parçalý harika bir oyuncak set.", Fiyat = 280 }
+            new Urun
+            {
+                Ad = "Kayseri Usulü Ev Mantýsý (1 Kg)",
+                Aciklama = "%100 dana kýymasýyla, tamamen ev ortamýnda elde kesilerek hazýrlanmýþ dondurulmuþ anne mantýsý.",
+                Fiyat = 350,
+                ResimUrl = "mantý.jpg", // Boþ kalmasýn diye ekledik
+                UygulamaKullanicisiId = null // Eðer modeli '?' ile yaptýysan null yazabilirsin
+            },
+            new Urun
+            {
+                Ad = "Doðal Taþlý El Yapýmý Kolye",
+                Aciklama = "Gerçek ametist ve lav taþlarý kullanýlarak pirinç tel sarma tekniðiyle tasarlanmýþ eþsiz þans kolyesi.",
+                Fiyat = 190,
+                ResimUrl = "kolye.jpg",
+                UygulamaKullanicisiId = null
+            },
+            new Urun
+            {
+                Ad = "Ahþap Oyuncak Tren Seti",
+                Aciklama = "Çocuklar için tamamen doðal gürgen aðacýndan üretilmiþ, organik boyalý 5 parçalý harika bir oyuncak set.",
+                Fiyat = 280,
+                ResimUrl = "tren.jpg",
+                UygulamaKullanicisiId = null
+            }
         };
 
         context.Urunler.AddRange(urunler);
         context.SaveChanges();
     }
-}
+    }
 
-// --- ORTAM KONTROLÜ ---
-if (!app.Environment.IsDevelopment())
+    // --- ORTAM KONTROLÜ ---
+    if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();

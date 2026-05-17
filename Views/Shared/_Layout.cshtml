@@ -36,12 +36,29 @@
                 </a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark font-weight-bold" asp-controller="Product" asp-action="Urunlerim">
+                                    💼 Benim Ürünlerim
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-warning btn-sm nav-link text-dark ms-2" asp-controller="Product" asp-action="Ekle">
+                                    ✨ Ürün Sat
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Anasayfa 🏠</a>
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Cart" asp-action="Index">🛒 Sepetim</a>
+                            </li>
+                            }
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Product" asp-action="Ekle">Ürün Ekle ➕</a>
-                        </li>
+                       
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<EmekSepetiWeb.Models.Urun>
+
+@{
+    ViewData["Title"] = "Ürün Yönetimi";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>💼 Benim El Emeği Ürünlerim</h2>
+        <!-- ProductController içindeki Ekle metoduna yönlendirir -->
+        <a asp-controller="Product" asp-action="Ekle" class="btn btn-success">+ Yeni Ürün Ekle</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Henüz satışta bir ürününüz bulunmuyor. Yukarıdaki butonu kullanarak ilk ilanınızı verebilirsiniz!</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Görsel</th>
+                        <th>Ürün Adı</th>
+                        <th>Fiyat</th>
+                        <th>Kategori No</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var urun in Model)
+                    {
+                        <tr>
+                            <td>
+                                <!-- Ürün resmini çeker, yoksa kırık görünmesin diye geçici resim basar -->
+                                <img src="@urun.ResimUrl" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='https://placehold.co/100?text=Görsel+Yok'">
+                            </td>
+                            <td><strong>@urun.Ad</strong></td>
+                            <td><span class="text-success fw-bold">@urun.Fiyat.ToString("C2")</span></td>
+                            <td><span class="badge bg-secondary">@urun.KategoriId</span></td>
+                            <td>
+                                <!-- Güncelleme Butonu (ProductController'a gider) -->
+                                <a asp-controller="Product" asp-action="Duzenle" asp-route-id="@urun.Id" class="btn btn-primary btn-sm me-1">
+                                    ✏️ Düzenle
+                                </a>
+                                <!-- Silme Butonu (ProductController'a gider) -->
+                                <a asp-controller="Product" asp-action="Sil" asp-route-id="@urun.Id" class="btn btn-danger btn-sm" onclick="return confirm('Bu el emeği ürünü silmek istediğinize emin misiniz?')">
+                                    🗑️ Sil
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

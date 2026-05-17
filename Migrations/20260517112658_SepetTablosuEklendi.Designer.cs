@@ -4,6 +4,7 @@ using EmekSepetiWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmekSepetiWeb.Migrations
 {
     [DbContext(typeof(UygulamaDbContext))]
-    partial class UygulamaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260517112658_SepetTablosuEklendi")]
+    partial class SepetTablosuEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,36 +143,6 @@ namespace EmekSepetiWeb.Migrations
                     b.HasIndex("UygulamaKullanicisiId");
 
                     b.ToTable("SepetElemanlari");
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.Siparis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("SiparisTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TeslimatAdresi")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeslimatTuru")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ToplamTutar")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UygulamaKullanicisiId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Siparisler");
                 });
 
             modelBuilder.Entity("EmekSepetiWeb.Models.Urun", b =>

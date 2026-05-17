@@ -10,5 +10,12 @@ namespace EmekSepetiWeb.Data
         public UygulamaDbContext(DbContextOptions<UygulamaDbContext> options) : base(options) { }
 
         public DbSet<Urun> Urunler { get; set; } // Bu satır ProductController için hayati!
+        public DbSet<SepetElemani> SepetElemanlari { get; set; }
+
+        public DbSet<Siparis> Siparisler { get; set; }
+        
+
+
+        public DbSet<Kategori> Kategoriler { get; set; }
     }
 }

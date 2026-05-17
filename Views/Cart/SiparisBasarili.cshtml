@@ -1,0 +1,19 @@
+﻿@model EmekSepetiWeb.Models.Siparis
+
+<div class="container mt-5 text-center" style="max-width: 650px;">
+    <div class="card p-5 shadow border-0 bg-white rounded">
+        <div class="display-1 text-success mb-3">🎉</div>
+        <h2 class="text-success fw-bold">Siparişiniz Başarıyla Alındı!</h2>
+        <p class="text-muted lead mt-2">Emek Sepeti'nden alışveriş yaptığınız için teşekkür ederiz.</p>
+
+        <div class="border rounded p-3 my-4 bg-light text-start">
+            <h5 class="border-bottom pb-2">📋 Sipariş Detayları</h5>
+            <div class="mb-2"><strong>Sipariş Tarihi:</strong> @Model.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</div>
+            <div class="mb-2"><strong>Toplam Tutar:</strong> <span class="text-success fw-bold">@Model.ToplamTutar.ToString("C2")</span></div>
+            <div class="mb-2"><strong>Teslimat Türü:</strong> @(Model.TeslimatTuru == "Kargo" ? "🚚 Kargo ile Adrese Teslim" : "🤝 Elden Teslim")</div>
+            <div><strong>Teslimat Notu / Adres:</strong> @Model.TeslimatAdresi</div>
+        </div>
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg px-4 shadow-sm">🛒 Alışverişe Devam Et</a>
+    </div>
+</div>

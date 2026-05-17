@@ -4,6 +4,7 @@ using EmekSepetiWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmekSepetiWeb.Migrations
 {
     [DbContext(typeof(UygulamaDbContext))]
-    partial class UygulamaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514220159_ResimUrlNullable")]
+    partial class ResimUrlNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,80 +101,6 @@ namespace EmekSepetiWeb.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("EmekSepetiWeb.Models.Kategori", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Ad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Kategoriler");
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.SepetElemani", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Adet")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UrunId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UygulamaKullanicisiId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UrunId");
-
-                    b.HasIndex("UygulamaKullanicisiId");
-
-                    b.ToTable("SepetElemanlari");
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.Siparis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("SiparisTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TeslimatAdresi")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeslimatTuru")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ToplamTutar")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UygulamaKullanicisiId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Siparisler");
-                });
-
             modelBuilder.Entity("EmekSepetiWeb.Models.Urun", b =>
                 {
                     b.Property<int>("Id")
@@ -191,9 +120,6 @@ namespace EmekSepetiWeb.Migrations
                     b.Property<decimal>("Fiyat")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("KategoriId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OlusturmaTarihi")
                         .HasColumnType("datetime2");
 
@@ -204,8 +130,6 @@ namespace EmekSepetiWeb.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("KategoriId");
 
                     b.HasIndex("UygulamaKullanicisiId");
 
@@ -345,38 +269,11 @@ namespace EmekSepetiWeb.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EmekSepetiWeb.Models.SepetElemani", b =>
-                {
-                    b.HasOne("EmekSepetiWeb.Models.Urun", "Urun")
-                        .WithMany()
-                        .HasForeignKey("UrunId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EmekSepeti.Models.UygulamaKullanicisi", "UygulamaKullanicisi")
-                        .WithMany()
-                        .HasForeignKey("UygulamaKullanicisiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Urun");
-
-                    b.Navigation("UygulamaKullanicisi");
-                });
-
             modelBuilder.Entity("EmekSepetiWeb.Models.Urun", b =>
                 {
-                    b.HasOne("EmekSepetiWeb.Models.Kategori", "Kategori")
-                        .WithMany("Urunler")
-                        .HasForeignKey("KategoriId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EmekSepeti.Models.UygulamaKullanicisi", "UygulamaKullanicisi")
                         .WithMany()
                         .HasForeignKey("UygulamaKullanicisiId");
-
-                    b.Navigation("Kategori");
 
                     b.Navigation("UygulamaKullanicisi");
                 });
@@ -430,11 +327,6 @@ namespace EmekSepetiWeb.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.Kategori", b =>
-                {
-                    b.Navigation("Urunler");
                 });
 #pragma warning restore 612, 618
         }

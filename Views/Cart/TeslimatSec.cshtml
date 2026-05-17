@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Teslimat Seçenekleri";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow-sm p-4">
+        <h3 class="text-center mb-4">📦 Teslimat Seçeneği</h3>
+        <hr />
+
+        <form asp-controller="Cart" asp-action="SiparisTamamla" method="post">
+
+            <div class="form-check p-3 border rounded mb-3 bg-light">
+                <input class="form-check-input ms-1" type="radio" name="teslimatTuru" id="kargoSecenek" value="Kargo" checked onclick="teslimatDegisti()">
+                <label class="form-check-label fw-bold ms-3" for="kargoSecenek">
+                    🚚 Kargo ile Adrese Teslim
+                </label>
+                <div class="text-muted small ms-3 mt-1">Ürününüz satıcı tarafından kargo firmasına teslim edilir.</div>
+            </div>
+
+            <div class="form-check p-3 border rounded mb-4 bg-light">
+                <input class="form-check-input ms-1" type="radio" name="teslimatTuru" id="eldenSecenek" value="Elden" onclick="teslimatDegisti()">
+                <label class="form-check-label fw-bold ms-3" for="eldenSecenek">
+                    🤝 Elden Teslim Alacağım
+                </label>
+                <div class="text-muted small ms-3 mt-1">Kargo ücreti ödemeden, satıcıyla ortak bir noktada buluşarak teslim alırsınız.</div>
+            </div>
+
+            <div id="adresAlani" class="mb-4">
+                <label class="form-label fw-bold">🏠 Teslimat Adresi</label>
+                <textarea name="teslimatAdresi" id="adresInput" class="form-control" rows="3" placeholder="Lütfen açık adresinizi yazınız..." required></textarea>
+            </div>
+
+            <div id="eldenAlani" class="alert alert-info mb-4 d-none">
+                <h5 class="alert-heading">💡 Elden Teslimat Hakkında</h5>
+                <p class="mb-0 small">Siparişiniz onaylandıktan sonra satıcının kayıtlı konumu göz önünde bulundurularak, sistem veya satıcı iletişimi üzerinden ortak bir buluşma noktası (Meydan, AVM, Metro durağı vb.) belirlenecektir.</p>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success w-100 btn-lg">✔️ Siparişi Onayla</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function teslimatDegisti() {
+        var kargoSecildi = document.getElementById("kargoSecenek").checked;
+        var adresAlani = document.getElementById("adresAlani");
+        var eldenAlani = document.getElementById("eldenAlani");
+        var adresInput = document.getElementById("adresInput");
+
+        if (kargoSecildi) {
+            adresAlani.classList.remove("d-none"); // Adres alanını göster
+            eldenAlani.classList.add("d-none");    // Elden yazısını gizle
+            adresInput.required = true;            // Adresi zorunlu yap
+        } else {
+            adresAlani.classList.add("d-none");    // Adres alanını gizle
+            eldenAlani.classList.remove("d-none"); // Elden yazısını göster
+            adresInput.required = false;           // Adres zorunluluğunu kaldır
+            adresInput.value = "";                 // İçini temizle
+        }
+    }
+</script>    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+

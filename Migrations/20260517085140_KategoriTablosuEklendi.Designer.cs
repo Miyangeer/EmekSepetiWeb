@@ -4,6 +4,7 @@ using EmekSepetiWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmekSepetiWeb.Migrations
 {
     [DbContext(typeof(UygulamaDbContext))]
-    partial class UygulamaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260517085140_KategoriTablosuEklendi")]
+    partial class KategoriTablosuEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,63 +116,6 @@ namespace EmekSepetiWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Kategoriler");
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.SepetElemani", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Adet")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UrunId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UygulamaKullanicisiId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UrunId");
-
-                    b.HasIndex("UygulamaKullanicisiId");
-
-                    b.ToTable("SepetElemanlari");
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.Siparis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("SiparisTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TeslimatAdresi")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeslimatTuru")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ToplamTutar")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UygulamaKullanicisiId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Siparisler");
                 });
 
             modelBuilder.Entity("EmekSepetiWeb.Models.Urun", b =>
@@ -343,25 +289,6 @@ namespace EmekSepetiWeb.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("EmekSepetiWeb.Models.SepetElemani", b =>
-                {
-                    b.HasOne("EmekSepetiWeb.Models.Urun", "Urun")
-                        .WithMany()
-                        .HasForeignKey("UrunId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EmekSepeti.Models.UygulamaKullanicisi", "UygulamaKullanicisi")
-                        .WithMany()
-                        .HasForeignKey("UygulamaKullanicisiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Urun");
-
-                    b.Navigation("UygulamaKullanicisi");
                 });
 
             modelBuilder.Entity("EmekSepetiWeb.Models.Urun", b =>

@@ -1,0 +1,78 @@
+﻿@model List<EmekSepetiWeb.Models.CartItemViewModel>
+
+<div class="container mt-5">
+    <h2>🛒 Alışveriş Sepetim</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Sepetinizde ürün bulunmamaktadır.</div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ürün</th>
+                            <th>Fiyat</th>
+                            <th class="text-center">Adet</th>
+                            <th>Toplam</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var eleman in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <h6 class="mb-0">@eleman.UrunAdi</h6>
+                                </td>
+                                <td>@eleman.Fiyat.ToString("C2")</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <form asp-controller="Cart" asp-action="AdetAzalt" method="post" class="m-0">
+                                            <input type="hidden" name="sepetElemanId" value="@eleman.SepetElemanId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0">-</button>
+                                        </form>
+
+                                        <span class="fw-bold" style="min-width: 25px; text-align: center;">@eleman.Adet</span>
+
+                                        <form asp-controller="Cart" asp-action="AdetArtir" method="post" class="m-0">
+                                            <input type="hidden" name="sepetElemanId" value="@eleman.SepetElemanId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0">+</button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@((eleman.Fiyat * eleman.Adet).ToString("C2"))</td>
+                                <td>
+                                    <form asp-controller="Cart" asp-action="Sil" method="post" onsubmit="return confirm('Bu ürünü sepetinizden çıkarmak istediğinize emin misiniz?');" class="m-0">
+                                        <input type="hidden" name="sepetElemanId" value="@eleman.SepetElemanId" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            🗑️ Sepetten Çıkar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm">
+                    <h4>Sipariş Özeti</h4>
+                    <hr />
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Genel Toplam:</h5>
+                        <h5 class="text-success">@Model.Sum(s => s.Fiyat * s.Adet).ToString("C2")</h5>
+                    </div>
+                    <a asp-controller="Cart" asp-action="TeslimatSec" class="btn btn-primary w-100 btn-lg">
+                        💳 Sipariş Oluştur
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
