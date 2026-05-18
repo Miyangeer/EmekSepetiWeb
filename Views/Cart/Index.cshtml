@@ -1,7 +1,12 @@
 ﻿@model List<EmekSepetiWeb.Models.CartItemViewModel>
 
 <div class="container mt-5">
-    <h2>🛒 Alışveriş Sepetim</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">🛒 Alışveriş Sepetim</h2>
+        <a asp-controller="Cart" asp-action="Siparislerim" class="btn btn-outline-primary btn-sm">
+            📦 Geçmiş Siparişlerim
+        </a>
+    </div>
     <hr />
 
     @if (!Model.Any())

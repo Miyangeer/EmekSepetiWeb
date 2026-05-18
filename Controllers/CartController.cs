@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using EmekSepetiWeb.Data;
 using EmekSepetiWeb.Models;
 using EmekSepeti.Models;
+using System.Security.Claims;
 
 namespace EmekSepetiWeb.Controllers
 {
@@ -170,7 +171,6 @@ namespace EmekSepetiWeb.Controllers
                 }
             }
 
-            // Yeni sipariş kaydını oluşturuyoruz
             var yeniSiparis = new Siparis
             {
                 UygulamaKullanicisiId = kullaniciId,
@@ -180,16 +180,25 @@ namespace EmekSepetiWeb.Controllers
                 TeslimatAdresi = teslimatTuru == "Kargo" ? teslimatAdresi : "Elden Teslim Alınacak (Ortak Nokta)"
             };
 
-            // İsteğe bağlı: _context.Siparisler.Add(yeniSiparis); diyerek DB'ye kaydedebilirsiniz.
-
-            // Sipariş tamamlandığı için kullanıcının sepetini boşaltıyoruz
+            _context.Siparisler.Add(yeniSiparis);
             _context.SepetElemanlari.RemoveRange(sepetElemanlari);
             await _context.SaveChangesAsync();
 
-            // Başarılı sayfasına yönlendiriyoruz
             return View("SiparisBasarili", yeniSiparis);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Siparislerim()
+        {
+            var kullaniciId = _userManager.GetUserId(User);
+
+            var gecmisSiparisler = await _context.Siparisler
+                .Where(s => s.UygulamaKullanicisiId == kullaniciId)
+                .OrderByDescending(s => s.SiparisTarihi)
+                .ToListAsync();
+
+            return View(gecmisSiparisler);
+        }
     }
 
 

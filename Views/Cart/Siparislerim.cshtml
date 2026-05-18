@@ -1,0 +1,63 @@
+﻿@model List<EmekSepetiWeb.Models.Siparis>
+
+@{
+    ViewData["Title"] = "Siparişlerim";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📦 Geçmiş Siparişlerim</h2>
+        <span class="badge bg-primary fs-6">Toplam: @Model.Count() Sipariş</span>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info text-center p-5 shadow-sm rounded">
+            <i class="bi bi-cart-x fs-1 d-block mb-3"></i>
+            <h4>Henüz hiç siparişiniz bulunmuyor.</h4>
+            <p class="text-muted">El emeği harika ürünlerimizi incelemek için ana sayfaya göz atabilirsiniz.</p>
+            <a href="/" class="btn btn-primary mt-2">Alışverişe Başla</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var siparis in Model)
+            {
+                <div class="col-12 mb-3">
+                    <div class="card shadow-sm border-start border-primary border-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <h6 class="text-muted mb-1">Sipariş Tarihi</h6>
+                                    <strong>@siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="text-muted mb-1">Teslimat Türü</h6>
+                                    @if (siparis.TeslimatTuru == "Kargo")
+                                    {
+                                        <span class="badge bg-success">🚚 Kargo İle Teslimat</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">🤝 Elden Teslim</span>
+                                    }
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted mb-1">Teslimat Adresi / Notu</h6>
+                                    <small class="text-truncate d-inline-block" style="max-width: 300px;">
+                                        @(string.IsNullOrEmpty(siparis.TeslimatAdresi) ? "Elden teslimat noktası satıcı ile ortak belirlenecektir." : siparis.TeslimatAdresi)
+                                    </small>
+                                </div>
+                                <div class="col-md-2 text-md-end">
+                                    <h6 class="text-muted mb-1">Toplam Tutar</h6>
+                                    <h5 class="text-primary mb-0">@siparis.ToplamTutar.ToString("C2")</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
