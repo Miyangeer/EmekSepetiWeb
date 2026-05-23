@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Emek Sepeti</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         body {
             background-color: #fcf8f2;
@@ -20,59 +20,111 @@
         .nav-link {
             color: #555 !important;
             font-weight: 600;
+            transition: color 0.2s ease;
         }
 
             .nav-link:hover {
                 color: #764ba2 !important;
             }
+
+        /* 👑 JAVASCRIPT ÇAKIŞMASINI ÇÖZEN SİHİRLİ CSS ALANI 👑 */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            margin-top: 0px !important;
+            transform: translateY(0) !important;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            z-index: 9999 !important;
+            background-color: #ffffff !important;
+            border: 1px solid rgba(0,0,0,0.08) !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #764ba2 !important;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light border-bottom mb-4 py-3">
             <div class="container">
-                <a class="navbar-brand fw-bold fs-3 text-primary" style="background: linear-gradient(to right, #764ba2, #667eea); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" style="background: linear-gradient(to right, #764ba2, #667eea); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" asp-controller="Home" asp-action="Index">
                     EMEK SEPETİ 🧺
                 </a>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 align-items-center">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav me-auto ms-3 gap-3">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Anasayfa 🏠</a>
+                            <a class="nav-link px-2" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house text-success me-1"></i> Anasayfa
+                            </a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark font-weight-bold" asp-controller="Product" asp-action="Urunlerim">
-                                    💼 Benim Ürünlerim
+                                <a class="nav-link px-2" asp-controller="Product" asp-action="Urunlerim">
+                                    <i class="fa-solid fa-briefcase text-secondary me-1"></i> Benim Ürünlerim
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="btn btn-warning btn-sm nav-link text-dark ms-2 px-3 rounded" asp-controller="Product" asp-action="Ekle">
-                                    ✨ Ürün Sat
+                                <a class="nav-link px-2" asp-controller="Product" asp-action="Ekle">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i> Ürün Sat
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Cart" asp-action="Index">🛒 Sepetim</a>
+                                <a class="nav-link px-2" asp-controller="Cart" asp-action="Index">
+                                    <i class="fa-solid fa-cart-shopping text-info me-1"></i> Sepetim
+                                </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Cart" asp-action="Siparislerim">📦 Siparişlerim</a>
+                                <a class="nav-link px-2" asp-controller="Cart" asp-action="Siparislerim">
+                                    <i class="fa-solid fa-box text-warning me-1"></i> Siparişlerim
+                                </a>
                             </li>
                         }
                     </ul>
-                    <ul class="navbar-nav">
+
+                    <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            // Sistem ismi bulamazsa e-posta adresini B planı olarak buraya koyar
                             var kullaniciIsmi = User.FindFirst("TamAd")?.Value ?? User.Identity.Name;
-                            <li class="nav-item d-flex align-items-center">
-                                <span class="nav-link text-dark me-2">👋 Hadi bakalım, <strong>@kullaniciIsmi</strong> ✨</span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-controller="Account" asp-action="CikisYap">❌ Çıkış</a>
+
+                            <li class="nav-item dropdown">
+                                <div class="fw-bold text-dark d-flex align-items-center gap-2 border px-3 py-1.5 rounded-pill shadow-sm" style="background-color: #f8f9fa; cursor: pointer;">
+                                    <i class="fa-solid fa-circle-user fs-5 text-secondary"></i>
+                                    <span>@kullaniciIsmi</span>
+                                    <i class="fa-solid fa-angle-down ms-1 text-muted" style="font-size: 0.8rem;"></i>
+                                </div>
+
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-1">
+                                    <li>
+                                        <a class="dropdown-item py-2 fw-semibold" asp-controller="Product" asp-action="Urunlerim">
+                                            <i class="fa-solid fa-basket-shopping me-2 text-muted"></i> Mağazam
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item py-2 text-danger fw-bold" asp-controller="Account" asp-action="CikisYap">
+                                            <i class="fa-solid fa-right-from-bracket me-2"></i> Çıkış Yap
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
@@ -85,15 +137,19 @@
                             </li>
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
