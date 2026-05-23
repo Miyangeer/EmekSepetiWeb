@@ -24,14 +24,15 @@ namespace EmekSepetiWeb.Controllers
             _userManager = userManager;
         }
 
-        // 1. ADIMDA NAVBAR'A BAĞLADIĞIMIZ YENİ METOT (Urunlerim)
+        // ➕ ProductController.cs içindeki Urunlerim Metodu
         public async Task<IActionResult> Urunlerim()
         {
-            // Giriş yapan kullanıcının ID'sini senin sistemindeki userManager ile alıyoruz
+            // Giriş yapan kullanıcının ID'sini alıyoruz
             var kullaniciId = _userManager.GetUserId(User);
 
-            // Veritabanından sadece bu kullanıcıya ait ürünleri çekiyoruz
+            // DÜZELTME: .Include(u => u.Kategori) ekleyerek numaradan isme geçiş köprüsünü kurduk!
             var benimUrunlerim = await _context.Urunler
+                .Include(u => u.Kategori)
                 .Where(u => u.UygulamaKullanicisiId == kullaniciId)
                 .OrderByDescending(u => u.OlusturmaTarihi)
                 .ToListAsync();
