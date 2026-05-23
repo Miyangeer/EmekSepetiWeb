@@ -1,0 +1,92 @@
+﻿@model EmekSepetiWeb.Models.Urun
+
+<div class="container mt-5">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <div class="card shadow-sm p-4 border-0 rounded-4" style="background-color: #ffffff;">
+        <div class="row">
+            <div class="col-md-6 text-center d-flex align-items-center justify-content-center">
+                @{
+                    // Eğer veritabanından gelen veri zaten "/images/" ile başlıyorsa direkt bas,
+                    // sadece dosya adı geliyorsa başına "/images/" ekle. Böylece ASLA resim hatası yaşamazsın!
+                    string temizResimYolu = Model.ResimUrl ?? "";
+                    if (!temizResimYolu.StartsWith("/") && !temizResimYolu.StartsWith("http"))
+                    {
+                        temizResimYolu = "/images/" + temizResimYolu;
+                    }
+                }
+                <img src="@temizResimYolu" class="img-fluid rounded-4 shadow-sm" alt="@Model.Ad" style="max-height: 400px; object-fit: cover; width: 100%;" onerror="this.src='https://placehold.co/600x400?text=Görsel+Bulunamadı'">
+            </div>
+
+            <div class="col-md-6 d-flex flex-column justify-content-between">
+                <div>
+                    <h1 class="fw-bold text-dark mb-3">@Model.Ad</h1>
+
+                    <div class="p-3 rounded-3 mb-4" style="background-color: #fdfbf7; border-left: 4px solid #764ba2;">
+                        <h6 class="text-uppercase fw-bold mb-2" style="color: #764ba2;"><i class="fa-solid fa-align-left me-2"></i>Ürün Açıklaması</h6>
+                        <p class="text-secondary m-0" style="font-size: 1.05rem; line-height: 1.6;">
+                            @Model.Aciklama
+                        </p>
+                    </div>
+
+                    <div class="card border-light bg-light p-3 rounded-3 mb-4">
+                        <h6 class="fw-bold text-muted mb-3"><i class="fa-solid fa-list-check me-2"></i> Ürün Bilgileri</h6>
+                        <div class="row g-3 default-text" style="font-size: 0.95rem;">
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Kategori</span>
+                                <strong class="text-dark">@(Model.Kategori != null ? Model.Kategori.Ad : "El Emeği Üretim")</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Yayınlanma Tarihi</span>
+                                <strong class="text-dark">@Model.OlusturmaTarihi.ToString("dd.MM.yyyy")</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Kargo Seçeneği</span>
+                                <strong class="text-success"><i class="fa-solid fa-truck-moving me-1"></i> Standart Kargo</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted d-block small">Durum</span>
+                                <strong class="text-primary"><i class="fa-solid fa-circle-check me-1"></i> Siparişe Hazır</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center p-2 rounded-3 border border-dashed text-muted" style="font-size: 0.85rem; border-style: dashed !important;">
+                        <div class="text-center px-2">
+                            <i class="fa-solid fa-shield-halved fa-2x text-muted mb-1"></i>
+                            <span class="d-block fw-bold">Güvenli Ödeme</span>
+                        </div>
+                        <div class="text-center px-2">
+                            <i class="fa-solid fa-heart fa-2x text-muted mb-1"></i>
+                            <span class="d-block fw-bold">Destek Hattı</span>
+                        </div>
+                        <div class="text-center px-2">
+                            <i class="fa-solid fa-box-open fa-2x text-muted mb-1"></i>
+                            <span class="d-block fw-bold">Özenli Paketleme</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 rounded-3 d-flex align-items-center justify-content-between shadow-sm" style="background-color: #f8f9fa;">
+                    <div>
+                        <span class="text-muted d-block small fw-bold text-uppercase">Fiyat</span>
+                        <h2 class="text-success fw-bold m-0">₺@Model.Fiyat.ToString("N2")</h2>
+                    </div>
+
+                    <form asp-controller="Cart" asp-action="SepeteEkle" method="post" class="m-0">
+                        <input type="hidden" name="urunId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success btn-lg px-4 rounded-3 shadow-sm d-flex align-items-center gap-2" style="background: linear-gradient(to right, #11998e, #38ef7d); border: none;">
+                            <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary px-4 rounded-pill shadow-sm">
+            <i class="fa-solid fa-arrow-left me-2"></i> Alışverişe Devam Et
+        </a>
+    </div>
+</div>

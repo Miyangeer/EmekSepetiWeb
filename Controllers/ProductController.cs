@@ -72,10 +72,12 @@ namespace EmekSepetiWeb.Controllers
                     await ResimDosyasi.CopyToAsync(stream);
                 }
 
-                urun.ResimUrl = "/images/" + benzersizDosyaAdi;
+                // DÜZELTME: Başına ekstra "/images/" eklemiyoruz, sadece dosya adını yazıyoruz!
+                urun.ResimUrl = benzersizDosyaAdi;
             }
             else
             {
+                // Resim seçilmezse Unsplash'ten gelen link direkt tam url olduğu için bu kalabilir.
                 urun.ResimUrl = "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=500";
             }
 
@@ -163,6 +165,18 @@ namespace EmekSepetiWeb.Controllers
 
             // İşlem bitince kullanıcının kendi ürün listesine geri dön
             return RedirectToAction("Urunlerim");
+        }
+        // 📌 DETAILS METODUNU DA ASENKRON YAPTIK (Daha performanslı çalışması için)
+        public async Task<IActionResult> Details(int id)
+        {
+            var urun = await _context.Urunler.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (urun == null)
+            {
+                return NotFound();
+            }
+
+            return View(urun);
         }
     }
 }

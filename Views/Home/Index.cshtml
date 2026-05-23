@@ -6,36 +6,48 @@
 
 <div class="container mt-4">
     <div class="row">
-        
-        <!-- SOL TARAF: KATEGORİ MENÜSÜ -->
+
         <div class="col-md-3">
-            <h4 class="mb-3">Kategoriler</h4>
-            <div class="list-group">
-                <!-- Hepsini Göster Butonu -->
-                <a href="@Url.Action("Index", "Home")" class="list-group-item list-group-item-action">
-                    Tüm Ürünler
+            <h4 class="mb-3" style="color: #555; font-weight: 600;">Kategoriler</h4>
+            <div class="list-group shadow-sm rounded-3">
+
+                @{
+                    var seciliKategori = ViewContext.RouteData.Values["kategoriId"]?.ToString()
+                    ?? Context.Request.Query["kategoriId"].ToString();
+                }
+
+                <a href="@Url.Action("Index", "Home")"
+                   class="list-group-item list-group-item-action fw-semibold @(string.IsNullOrEmpty(seciliKategori) ? "text-white" : "text-dark")"
+                   style="@(string.IsNullOrEmpty(seciliKategori) ? "background: linear-gradient(to right, #764ba2, #667eea); border-color: #764ba2;" : "background-color: #fff;")">
+                    <i class="fa-solid fa-border-all me-2"></i> Tüm Ürünler
                 </a>
-                
-                <!-- Sabit Kategorilerimiz (Veritabanındaki ID'lere göre link veriyoruz) -->
-                <a href="@Url.Action("Index", "Home", new { kategoriId = 1 })" class="list-group-item list-group-item-action">
+
+                <a href="@Url.Action("Index", "Home", new { kategoriId = 1 })"
+                   class="list-group-item list-group-item-action fw-semibold @(seciliKategori == "1" ? "text-white" : "text-dark")"
+                   style="@(seciliKategori == "1" ? "background: linear-gradient(to right, #764ba2, #667eea); border-color: #764ba2;" : "background-color: #fff;")">
                     🍳 Ev Yemekleri & Gıda
                 </a>
-                <a href="@Url.Action("Index", "Home", new { kategoriId = 2 })" class="list-group-item list-group-item-action">
+
+                <a href="@Url.Action("Index", "Home", new { kategoriId = 2 })"
+                   class="list-group-item list-group-item-action fw-semibold @(seciliKategori == "2" ? "text-white" : "text-dark")"
+                   style="@(seciliKategori == "2" ? "background: linear-gradient(to right, #764ba2, #667eea); border-color: #764ba2;" : "background-color: #fff;")">
                     📿 Takı & Aksesuar
                 </a>
-                <a href="@Url.Action("Index", "Home", new { kategoriId = 3 })" class="list-group-item list-group-item-action">
+
+                <a href="@Url.Action("Index", "Home", new { kategoriId = 3 })"
+                   class="list-group-item list-group-item-action fw-semibold @(seciliKategori == "3" ? "text-white" : "text-dark")"
+                   style="@(seciliKategori == "3" ? "background: linear-gradient(to right, #764ba2, #667eea); border-color: #764ba2;" : "background-color: #fff;")">
                     🧸 Ahşap & Oyuncak
                 </a>
             </div>
         </div>
 
-        <!-- SAĞ TARAF: ÜRÜN VİTRİNİ (KARTLAR) -->
         <div class="col-md-9">
-            <h4 class="mb-3">El Emeği Ürünler</h4>
-            
+            <h4 class="mb-3" style="color: #333; font-weight: 600;">El Emeği Ürünler</h4>
+
             @if (!Model.Any())
             {
-                <div class="alert alert-warning">Bu kategoride henüz ürün bulunmamaktadır.</div>
+                <div class="alert alert-warning shadow-sm rounded-3">Bu kategoride henüz ürün bulunmamaktadır.</div>
             }
             else
             {
@@ -43,29 +55,36 @@
                     @foreach (var urun in Model)
                     {
                         <div class="col">
-                            <div class="card h-100 shadow-sm">
-                                <!-- Ürün Resmi -->
-                                <img src="/images/@urun.ResimUrl" class="card-img-top" alt="@urun.Ad" style="height: 200px; object-fit: cover;" onerror="this.src='https://placehold.co/600x400?text=Görsel+Yok'">
-                                <div class="card-body">
-                                    <h5 class="card-title text-truncate">@urun.Ad</h5>
-                                    <p class="card-text text-muted text-truncate">@urun.Aciklama</p>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <span class="badge bg-success fs-6">@urun.Fiyat.ToString("C2")</span>
-                                        <small class="text-muted">
-                                            👤 <!-- Sadece kullanıcı adını sildik, yerine bu formu koyuyoruz -->
-                                            <form asp-controller="Cart" asp-action="SepeteEkle" method="post" class="mt-2">
-                                                <input type="hidden" name="urunId" value="@urun.Id" />
-                                                <div class="d-grid">
-                                                    <button type="submit" class="btn btn-success btn-sm w-100">
-                                                        🛒 Sepete Ekle
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </small>
+                            <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+
+                                @{
+                                    string anaSayfaResimYolu = urun.ResimUrl ?? "";
+                                    if (!anaSayfaResimYolu.StartsWith("/") && !anaSayfaResimYolu.StartsWith("http"))
+                                    {
+                                        anaSayfaResimYolu = "/images/" + anaSayfaResimYolu;
+                                    }
+                                }
+                                <img src="@anaSayfaResimYolu" class="card-img-top" alt="@urun.Ad" style="height: 200px; object-fit: cover;" onerror="this.src='https://placehold.co/600x400?text=Görsel+Yok'">
+
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title text-dark fw-bold text-truncate mb-2">@urun.Ad</h5>
+
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <span class="badge bg-success p-2 fs-6 rounded-3">@urun.Fiyat.ToString("C2")</span>
+
+                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@urun.Id" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                                            İncele <i class="fa-solid fa-angle-right ms-1"></i>
+                                        </a>
                                     </div>
-                                </div>
-                                <div class="card-footer bg-transparent border-top-0">
-                                    <button class="btn btn-outline-primary btn-sm w-100">Detayları Gör</button>
+
+                                    <form asp-controller="Cart" asp-action="SepeteEkle" method="post" class="mt-3">
+                                        <input type="hidden" name="urunId" value="@urun.Id" />
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-success btn-sm w-100 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-1" style="background: linear-gradient(to right, #11998e, #38ef7d); border: none;">
+                                                <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
